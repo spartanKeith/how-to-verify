@@ -1,0 +1,336 @@
+<title>Payment Verification Guides</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: dark brand band on top, guide switcher, then one readable column per guide (video, then numbered steps with screenshots). */
+:root {
+  --bg: #f7f6f9;
+  --surface: #ffffff;
+  --fg: #1d1a24;
+  --muted: #615b6e;
+  --line: #e3dfe9;
+  --brand: #714b67;        /* Odoo plum, matches the app the guides describe */
+  --brand-soft: #f1e9ef;
+  --mark: #f59e0b;         /* same orange as the highlight boxes in the screenshots */
+  --mark-soft: #fff4dc;
+  --band: #1e1830;
+  --band-fg: #f3f0f8;
+  --done: #1f7a4d;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14111b; --surface: #1d1926; --fg: #ece8f3; --muted: #a69fb4; --line: #322b3f;
+    --brand: #d3a6c7; --brand-soft: #2c2131; --mark: #f7b23b; --mark-soft: #33280f;
+    --band: #0e0b14; --band-fg: #f3f0f8; --done: #5fcf94; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14111b; --surface: #1d1926; --fg: #ece8f3; --muted: #a69fb4; --line: #322b3f;
+  --brand: #d3a6c7; --brand-soft: #2c2131; --mark: #f7b23b; --mark-soft: #33280f;
+  --band: #0e0b14; --band-fg: #f3f0f8; --done: #5fcf94; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Brand band */
+.band { background: var(--band); color: var(--band-fg); }
+.band .wrap { display: flex; align-items: center; gap: 18px; padding-block: 22px; }
+.band img { width: 52px; height: auto; flex: none; }
+.band .org { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; opacity: .72; }
+.band h1 { font-family: var(--display); font-weight: 500; font-size: clamp(24px, 4vw, 34px); line-height: 1.15; margin: 2px 0 0; text-wrap: balance; }
+
+/* Guide switcher */
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--band); }
+.tabs .wrap { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+.tab { flex: none; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 9px 14px; border: 1px solid transparent; border-radius: 8px; background: none; color: var(--muted); font: inherit; cursor: pointer; text-align: left; }
+.tab .who { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.tab .what { font-size: 15px; font-weight: 600; color: var(--fg); }
+.tab:hover { background: var(--surface); border-color: var(--line); }
+.tab[aria-selected="true"] { background: var(--surface); border-color: var(--brand); }
+.tab[aria-selected="true"] .who { color: var(--brand); }
+.tab:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--mark); outline-offset: 2px; }
+
+/* Guide */
+main { padding-block: 36px 64px; }
+.guide-head { display: grid; gap: 10px; max-width: 68ch; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand); }
+.guide-head h2 { font-family: var(--display); font-weight: 500; font-size: clamp(28px, 5vw, 42px); line-height: 1.12; margin: 0; text-wrap: balance; }
+.guide-head p { margin: 0; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.chip { font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; margin-top: 32px; align-items: start; }
+.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 92px); display: grid; gap: 14px; }
+.toc h3 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.toc a { display: grid; grid-template-columns: 26px 1fr; gap: 6px; padding: 6px 8px; border-radius: 6px; color: var(--fg); text-decoration: none; font-size: 14px; line-height: 1.35; }
+.toc a:hover { background: var(--surface); }
+.toc .n { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; }
+.toc a.is-done .n { color: var(--done); }
+.toc a.is-done .t { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.progress { font-size: 13px; color: var(--muted); }
+.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin-top: 6px; }
+.bar i { display: block; height: 100%; width: 0; background: var(--done); transition: width .25s; }
+.reset { justify-self: start; background: none; border: 0; padding: 0; color: var(--brand); font: inherit; font-size: 13px; cursor: pointer; text-decoration: underline; }
+
+.content { display: grid; gap: 40px; min-width: 0; }
+.video { display: grid; gap: 10px; }
+.video video { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: var(--r); background: var(--band); display: block; }
+.video .cap { font-size: 14px; color: var(--muted); }
+.section-title { font-family: var(--display); font-weight: 500; font-size: 26px; margin: 0 0 4px; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 36px; }
+.step { display: grid; gap: 12px; scroll-margin-top: 100px; }
+.step-head { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 14px; align-items: start; }
+.num { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--brand); color: var(--surface); font-weight: 700; font-variant-numeric: tabular-nums; }
+.step.is-done .num { background: var(--done); }
+.step h4 { font-family: var(--display); font-weight: 500; font-size: 22px; line-height: 1.25; margin: 6px 0 2px; text-wrap: balance; }
+.step p { margin: 0; max-width: 66ch; }
+.done-btn { margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.done-btn svg { width: 14px; height: 14px; }
+.step.is-done .done-btn { border-color: var(--done); color: var(--done); }
+.shots { display: grid; gap: 12px; padding-left: 54px; }
+.shot { margin: 0; display: grid; gap: 6px; }
+.shot button { padding: 0; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); cursor: zoom-in; display: block; width: 100%; }
+.shot img { display: block; width: 100%; height: auto; }
+.shot figcaption { font-size: 13px; color: var(--muted); }
+.sub { padding-left: 54px; }
+
+.after { display: grid; gap: 12px; }
+.after ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 66ch; }
+.note { border: 1px solid var(--mark); background: var(--mark-soft); border-radius: var(--r); padding: 14px 18px; max-width: 72ch; }
+.note b { color: var(--fg); }
+.closing { color: var(--muted); margin: 0; }
+mark { background: none; color: inherit; font-weight: 700; }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 22px; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between; }
+
+/* Lightbox */
+.lb { position: fixed; inset: 0; z-index: 20; background: rgba(10, 8, 16, .88); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.lb img { max-width: 100%; max-height: 88vh; border-radius: 8px; }
+.lb button { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 14px); right: calc(env(safe-area-inset-right, 0px) + 14px); background: var(--surface); color: var(--fg); border: 0; border-radius: 999px; padding: 8px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+
+@media (max-width: 820px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .toc { position: static; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
+  .shots, .sub { padding-left: 0; }
+  .step-head { grid-template-columns: 40px minmax(0, 1fr); }
+  .step-head .done-btn { grid-column: 2; justify-self: start; margin-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<header class="band">
+  <div class="wrap">
+    <img src="img/logo.png" alt="Spartan BTY Inc. logo">
+    <div>
+      <div class="org">Spartan BTY Inc. · Odoo User Manual</div>
+      <h1>Payment Verification Guides</h1>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Guides">
+  <div class="wrap" role="tablist" id="tablist"></div>
+</nav>
+
+<main>
+  <div class="wrap" id="guide"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Spartan BTY Inc. · Payment verification process for CDM and Accounting</span>
+    <span>Odoo CRM and Accounting modules</span>
+  </div>
+</footer>
+
+<div class="lb" id="lb" hidden>
+  <button type="button" id="lbClose">Close</button>
+  <img id="lbImg" alt="">
+</div>
+
+<script>
+const GUIDES = [
+  {
+    id: 'cdm', who: 'For CDM', short: 'Check if a payment is verified',
+    title: 'How to Check if a Payment is Verified in the CRM Module',
+    module: 'CRM module',
+    purpose: 'When a customer pays, you record the advance payment on their opportunity in the CRM module. Follow the steps below to record the payment and check if it is verified.',
+    video: 'video/cdm.mp4',
+    steps: [
+      { t: 'Open Odoo', d: 'Log in and go to the Odoo home screen.', img: ['img/cdm_0.jpg'] },
+      { t: 'Press the CRM module', d: 'Press the **CRM** icon.', img: ['img/cdm_1.jpg'] },
+      { t: 'Select the opportunity card', d: 'Find the customer’s opportunity card in the pipeline and press it to open the record.', img: ['img/cdm_2.jpg', 'img/cdm_3.jpg'], caps: ['The opportunity card in the pipeline', 'The opened opportunity record'] },
+      { t: 'Press the “Advance Payments” tab', d: 'Scroll down to the tabs and press **Advance Payments**.', img: ['img/cdm_4.jpg'] },
+      { t: 'Press the “Advance Payment” button', d: 'Press the **Advance Payment** button. The Advance Payment window will open.', img: ['img/cdm_5.jpg'] },
+      { t: 'Double-check the details', d: 'Review the **Payment Method**, **Payment Type**, **Reference**, **Advance Amount** and **Date** before saving.', img: ['img/cdm_6.jpg'] },
+      { t: 'Press the “Make Advance Payment” button', d: 'Once everything is correct, press **Make Advance Payment**.', img: ['img/cdm_7.jpg'] },
+      { t: 'Check the status', d: 'The payment now appears in the list. Look at the **Status** column.', img: ['img/cdm_8.jpg'] },
+    ],
+    afterTitle: 'What the status means',
+    after: ['**Posted:** the payment is verified.', '**Advance Payment Status:** shows **Paid** once the CRM Residual reaches ₱0.00.'],
+    note: 'Always double-check the details in step 6 before pressing Make Advance Payment.',
+    closing: 'The payment is saved on the opportunity under the Advance Payments tab in Odoo.',
+  },
+  {
+    id: 'verify', who: 'For Accounting', short: 'Verify payment entries',
+    title: 'How to Verify Payment Entries in the Accounting Module',
+    module: 'Accounting module',
+    purpose: 'When CDM records a payment, it appears in the Accounting module for verification. Follow the steps below to find the entry, check its proof of payment, and verify it.',
+    video: 'video/verify.mp4',
+    steps: [
+      { t: 'Open the Accounting module', d: 'From the Odoo home screen, press the **Accounting** icon.', img: ['img/acct_1.jpg'] },
+      { t: 'Open Vendors and press Payments', d: 'In the top menu, press **Vendors**, then press **Payments**.', img: ['img/acct_2.jpg', 'img/acct_3.jpg'], caps: ['Vendors in the top menu', 'Payments in the Vendors menu'] },
+      { t: 'Filter it to “FOR VERIFICATION”', d: 'Press the dropdown arrow beside the search bar. Under **Favorites**, press **FOR VERIFICATION**.', img: ['img/acct_4.jpg', 'img/acct_5.jpg'], caps: ['The dropdown arrow beside the search bar', 'FOR VERIFICATION under Favorites'] },
+      { t: 'Choose the entry you want', d: 'Find the payment entry you want to check in the list.', img: ['img/acct_6.jpg'] },
+      { t: 'Press “View Proof” or check the PayMongo ID', d: 'Press the **View Proof** text button to see the payment proof. For PayMongo payments, you can also check the **PayMongo ID** column.', img: ['img/acct_7.jpg', 'img/acct_8.jpg'], caps: ['View Proof column', 'PayMongo ID column'] },
+      { t: 'Press “Verify”', d: 'Once the proof or PayMongo ID matches, press the **Verify** text button on that entry.', img: ['img/acct_9.jpg'] },
+    ],
+    afterTitle: 'After you verify',
+    after: ['**Verified:** the entry is removed from the FOR VERIFICATION list and the button changes to **Unverify**.'],
+    note: 'Only verify a payment after checking its proof of payment or PayMongo ID.',
+    closing: 'Your verification is saved on the payment entry in the Accounting module in Odoo.',
+  },
+  {
+    id: 'verified', who: 'For Accounting', short: 'View verified payments',
+    title: 'How to View Verified Payments in the Accounting Module',
+    module: 'Accounting module',
+    purpose: 'Follow the steps below to see all payment entries that are already verified, using the VERIFIED filter.',
+    video: 'video/verified.mp4',
+    steps: [
+      { t: 'Open the Accounting module', d: 'From the Odoo home screen, press the **Accounting** icon.', img: ['img/ver_1.jpg'] },
+      { t: 'Open Vendors and press Payments', d: 'In the top menu, press **Vendors**, then press **Payments**.', img: ['img/ver_2.jpg', 'img/ver_3.jpg'], caps: ['Vendors in the top menu', 'Payments in the Vendors menu'] },
+      { t: 'Filter it to “VERIFIED”', d: 'Press the dropdown arrow beside the search bar. Under **Favorites**, press **VERIFIED**.', img: ['img/ver_4.jpg', 'img/ver_5.jpg'], caps: ['The dropdown arrow beside the search bar', 'VERIFIED under Favorites'] },
+      { t: 'Check the verified entries', d: 'All verified payment entries are listed. Look at the **Payment Verified**, **Verified On** and **Verified By** columns.', img: ['img/ver_6.jpg', 'img/ver_7.jpg'], caps: ['The verified entries', 'Payment Verified, Verified On and Verified By columns'] },
+    ],
+    afterTitle: 'What you will see',
+    after: ['**Payment Verified:** the box is checked.', '**Verified On:** the date and time the payment was verified.', '**Verified By:** the name of the person who verified it.'],
+    note: 'If a payment was verified by mistake, press Unverify on that entry. It will go back to the FOR VERIFICATION list.',
+    closing: 'Verified entries stay saved in the Vendor Payments list in the Accounting module in Odoo.',
+  },
+];
+
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<mark>$1</mark>');
+const CHECK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
+
+const tablist = document.getElementById('tablist');
+const guideEl = document.getElementById('guide');
+let current = null;
+
+GUIDES.forEach(g => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'tab'; b.id = 'tab-' + g.id;
+  b.setAttribute('role', 'tab'); b.dataset.id = g.id;
+  b.innerHTML = `<span class="who">${g.who}</span><span class="what">${g.short}</span>`;
+  b.addEventListener('click', () => show(g.id, true));
+  tablist.appendChild(b);
+});
+
+function doneSet(id) { return new Set(store.get('done-' + id) || []); }
+
+function show(id, userAction) {
+  const g = GUIDES.find(x => x.id === id) || GUIDES[0];
+  current = g;
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.id === g.id)));
+  const done = doneSet(g.id);
+  guideEl.innerHTML = `
+    <div class="guide-head">
+      <span class="eyebrow">${g.who} · ${g.module}</span>
+      <h2>${esc(g.title)}</h2>
+      <p>${esc(g.purpose)}</p>
+      <div class="meta"><span class="chip">${g.steps.length} steps</span><span class="chip">Video guide included</span></div>
+    </div>
+    <div class="layout">
+      <aside class="toc" aria-label="Steps in this guide">
+        <h3>Steps</h3>
+        <ol>${g.steps.map((s, i) => `<li><a href="#${g.id}-step-${i + 1}" data-step="${i + 1}"><span class="n">${i + 1}.</span><span class="t">${md(s.t).replace(/<\/?mark>/g, '')}</span></a></li>`).join('')}</ol>
+        <div class="progress"><span id="progTxt"></span><div class="bar"><i id="progBar"></i></div></div>
+        <button type="button" class="reset" id="resetBtn">Clear my checkmarks</button>
+      </aside>
+      <div class="content">
+        <section class="video" aria-label="Video guide">
+          <h3 class="section-title">Watch the video</h3>
+          <video controls preload="metadata" playsinline src="${g.video}"></video>
+          <span class="cap">The same steps as below, with the place to click highlighted in each step.</span>
+        </section>
+        <section aria-label="Steps">
+          <h3 class="section-title">Steps</h3>
+          <ol class="steps">
+            ${g.steps.map((s, i) => `
+              <li class="step${done.has(i + 1) ? ' is-done' : ''}" id="${g.id}-step-${i + 1}" data-step="${i + 1}">
+                <div class="step-head">
+                  <span class="num">${i + 1}</span>
+                  <div><h4>${md(s.t).replace(/<\/?mark>/g, '')}</h4><p>${md(s.d)}</p></div>
+                  <button type="button" class="done-btn" aria-pressed="${done.has(i + 1)}">${CHECK}<span>${done.has(i + 1) ? 'Done' : 'Mark done'}</span></button>
+                </div>
+                <div class="shots">
+                  ${s.img.map((src, k) => `<figure class="shot"><button type="button" data-src="${src}" aria-label="Enlarge screenshot for step ${i + 1}"><img src="${src}" alt="Odoo screenshot for step ${i + 1}: ${esc(s.t)}" loading="lazy"></button>${s.caps ? `<figcaption>${esc(s.caps[k])}</figcaption>` : ''}</figure>`).join('')}
+                </div>
+              </li>`).join('')}
+          </ol>
+        </section>
+        <section class="after">
+          <h3 class="section-title">${esc(g.afterTitle)}</h3>
+          <ul>${g.after.map(a => `<li>${md(a)}</li>`).join('')}</ul>
+          <div class="note"><b>Note:</b> ${esc(g.note)}</div>
+          <p class="closing">${esc(g.closing)}</p>
+        </section>
+      </div>
+    </div>`;
+  updateProgress();
+  guideEl.querySelectorAll('.done-btn').forEach(btn => btn.addEventListener('click', () => toggle(btn.closest('.step'))));
+  guideEl.querySelectorAll('.shot button').forEach(btn => btn.addEventListener('click', () => openLb(btn.dataset.src, btn.querySelector('img').alt)));
+  document.getElementById('resetBtn').addEventListener('click', () => { store.set('done-' + g.id, []); show(g.id); });
+  store.set('lastGuide', g.id);
+  if (userAction) {
+    try { history.replaceState(null, '', '#' + g.id); } catch (e) {}
+    window.scrollTo({ top: 0 });
+  }
+}
+
+function toggle(stepEl) {
+  const n = Number(stepEl.dataset.step);
+  const done = doneSet(current.id);
+  done.has(n) ? done.delete(n) : done.add(n);
+  store.set('done-' + current.id, [...done]);
+  const on = done.has(n);
+  stepEl.classList.toggle('is-done', on);
+  const btn = stepEl.querySelector('.done-btn');
+  btn.setAttribute('aria-pressed', String(on));
+  btn.querySelector('span').textContent = on ? 'Done' : 'Mark done';
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = doneSet(current.id), total = current.steps.length;
+  document.getElementById('progTxt').textContent = `${done.size} of ${total} steps done`;
+  document.getElementById('progBar').style.width = (done.size / total * 100) + '%';
+  guideEl.querySelectorAll('.toc a').forEach(a => a.classList.toggle('is-done', done.has(Number(a.dataset.step))));
+}
+
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg');
+function openLb(src, alt) { lbImg.src = src; lbImg.alt = alt; lb.hidden = false; document.getElementById('lbClose').focus(); }
+function closeLb() { lb.hidden = true; lbImg.src = ''; }
+document.getElementById('lbClose').addEventListener('click', closeLb);
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+
+const fromHash = (location.hash || '').slice(1);
+show(GUIDES.some(g => g.id === fromHash) ? fromHash : (store.get('lastGuide') || 'cdm'));
+</script>
